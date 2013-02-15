@@ -1,0 +1,15 @@
+#!/bin/bash
+
+
+if ps aux | grep nm-applet | grep -v grep > /dev/null;
+
+   then  exit
+
+else
+
+   exec  nm-applet --sm-disable
+
+fi
+
+
+

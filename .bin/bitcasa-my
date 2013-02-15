@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if ps aux | grep bitcasa | grep -v grep | grep -v bitcasa-my > /dev/null;
+
+   then   exit
+
+   else
+
+     export LD_LIBRARY_PATH=/usr/heimdal/lib:$LD_LIBRARY_PATH
+     export PATH=/opt/heimdal/bin:/opt/heimdal/sbin:$PATH
+     exec bitcasa
+
+fi
