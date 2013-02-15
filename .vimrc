@@ -18,8 +18,8 @@ cmap w!! %!sudo tee > /dev/null %
 nnoremap ; :
 
 " absolute line numbers in insert mode, relative otherwise for easy movement
-au InsertEnter * :set nu
-au InsertLeave * :set rnu
+"au InsertEnter * :set nu
+"au InsertLeave * :set rnu
 
 noremap H ^
 noremap L $
