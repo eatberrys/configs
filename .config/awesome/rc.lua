@@ -61,7 +61,7 @@ local layouts =
     awful.layout.suit.tile,
 --  awful.layout.suit.tile.left,
 --  awful.layout.suit.tile.top,
-    awful.layout.suit.fair,
+--  awful.layout.suit.fair,
 --  awful.layout.suit.fair.horizontal,
 --  awful.layout.suit.spiral,
 --  awful.layout.suit.spiral.dwindle,
@@ -73,8 +73,7 @@ local layouts =
 -- }}}
 
 -- {{{ Wallpaper
---beautiful.wallpaper = os.getenv("XDG_CONFIG_HOME") .. "/Pictures/desktops/active/active.png"
---beautiful.wallpaper = "/home/mal/Pictures/desktops/active/active.png"
+beautiful.wallpaper = "/home/jacob/pictures/cvsled.jpg"
 if beautiful.wallpaper then
 --  for s = 1, screen.count() do
         gears.wallpaper.maximized(beautiful.wallpaper, nil, false)
@@ -96,16 +95,14 @@ end
 myawesomemenu = {
    { "manual", terminal .. " -e man awesome" },
    { "edit config", editor_cmd .. " " .. awesome.conffile },
-   { "restart awm", awesome.restart },
-   { "logout", awesome.quit },
-   { "reboot", "reboot" },
-   { "poweroff", "poweroff" }
+   { "restart", awesome.restart },
+   { "quit", awesome.quit }
 }
 
 mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
                                     { "open terminal", terminal },
-                                    { "firefox", "firefox" },
-                                    { "spotify", "spotify" },
+                                    { "chrome", "chromium" },
+				    { "suspend", "systemctl suspend"},
                                     { "lock", "i3lock -d -c 000000" },
                                     { "run", function() mypromptbox[mouse.screen]:run() end }
                                   }
@@ -306,15 +303,12 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "Down"  , function () awful.util.spawn("gksu 'cpupower frequency-set -g ondemand'"   ) end),
     awful.key({ modkey, "Control" }, "Up"    , function () awful.util.spawn("gksu 'cpupower frequency-set -g performance'") end),
 
-    awful.key({}, "XF86AudioMute"       , function () os.execute("volctl mute") end),
+    awful.key({}, "XF86AudioMute", function () os.execute("volctl mute") end),
     awful.key({}, "XF86AudioLowerVolume", function () os.execute("volctl down") end),
     awful.key({}, "XF86AudioRaiseVolume", function () os.execute("volctl up") end),
-    awful.key({ modkey }, "XF86AudioMute"       , function () os.execute("spotify-hotkey-sender.sh volmute") end),
-    awful.key({ modkey }, "XF86AudioLowerVolume", function () os.execute("spotify-hotkey-sender.sh voldown") end),
-    awful.key({ modkey }, "XF86AudioRaiseVolume", function () os.execute("spotify-hotkey-sender.sh volup") end),
-    awful.key({}, "XF86AudioPlay", function () os.execute("spotify-hotkey-sender.sh play") end),
-    awful.key({}, "XF86AudioNext", function () os.execute("spotify-hotkey-sender.sh next") end),
-    awful.key({}, "XF86AudioPrev", function () os.execute("spotify-hotkey-sender.sh prev") end)
+    awful.key({}, "XF86AudioPlay", function () os.execute("spotify-hotkey.sh play") end),
+    awful.key({}, "XF86AudioNext", function () os.execute("spotify-hotkey.sh next") end),
+    awful.key({}, "XF86AudioPrev", function () os.execute("spotify-hotkey.sh prev") end)
 
 )
 
@@ -394,7 +388,7 @@ root.keys(globalkeys)
 awful.rules.rules = {
     -- All clients will match this rule.
     { rule = { },
-      properties = { border_width = 0, -- = beautiful.border_width,
+      properties = { border_width = 1, -- = beautiful.border_width,
                      border_color = beautiful.border_normal,
                      focus = awful.client.focus.filter,
                      keys = clientkeys,
@@ -496,7 +490,11 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 do
   local cmds =
   {
-    "awm-auto.sh",
+      "nm-my",
+      "redshift-my",
+      "bitcasa-my",
+    "xrdb /home/jacob/.Xresources",
+    "nitrogen-my",
   }
 
   for _,i in pairs(cmds) do

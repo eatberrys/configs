@@ -1,7 +1,7 @@
-! xterm ----------------------------------------------------------------------
-
-xterm*background: #000000
-xterm*foreground: #00ff00
+! my customisations
+xterm*faceName:         terminus:pixelsize=15
+xterm*Background:   black
+xterm*Foreground:   green
 
 ! terminal colors ------------------------------------------------------------
 
@@ -27,9 +27,10 @@ xterm*foreground: #00ff00
 !*color5:  #ce5c00
 !*color13: #f57900
 !DarkCyan + Cyan (both not tango)
-!*color6:  #89b6e2
-!*color14: #46a4ff
-! LightGrey + White
-!*color7:  #cccccc
-!*color15: #ffffff
+    !*color6:  #89b6e2
+    !*color14: #46a4ff
+    ! LightGrey + White
+    !*color7:  #cccccc
+    !*color15: #ffffff
+
 

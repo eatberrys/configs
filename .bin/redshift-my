@@ -2,3 +2,4 @@
 
 export DISPLAY=:0.0
 exec redshift -l 44.136186:-72.661771 $@
+

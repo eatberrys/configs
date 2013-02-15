@@ -1,4 +1,12 @@
 #!/bin/bash
 
-cd ~/.bin/usr/local/
-exec java -Xmx2G -Xincgc -jar minecraft.jar
+cd ~/Documents/mc
+
+
+if [ "$1" ==  "ftb" ]
+
+then
+    exec java -jar FTB_Launcher.jar
+else
+    exec java -Xmx2G -Xincgc -jar minecraft.jar
+fi
