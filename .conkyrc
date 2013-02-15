@@ -1,0 +1,163 @@
+# conky configuration
+
+# set to yes if you want Conky to be forked in the background
+background no
+
+# X font when Xft is disabled, you can pick one with program xfontsel
+#font 5x7
+#font 6x10
+#font 7x13
+#font 8x13
+#font 9x15
+#font *mintsmild.se*
+#font -*-*-*-*-*-*-34-*-*-*-*-*-*-*
+
+
+# Use Xft?
+use_xft yes
+
+# Xft font when Xft is enabled
+#xftfont Bitstream Vera Sans Mono:size=8
+xftfont Freesans:pixelsize=9
+
+# Text alpha when using Xft
+xftalpha 0.8
+
+# Print everything to console?
+# out_to_console no
+
+# mail spool
+#mail_spool $MAIL
+
+# Update interval in seconds
+update_interval 2.0
+
+# This is the number of times Conky will update before quitting.
+# Set to zero to run forever.
+total_run_times 0
+
+# Create own window instead of using desktop (required in nautilus)
+own_window no
+
+# Use double buffering (reduces flicker, may not work for everyone)
+double_buffer yes
+
+# Minimum size of text area
+minimum_size 175
+maximum_width 200
+
+# Draw shades?
+draw_shades yes
+
+# Draw outlines?
+draw_outline no
+
+# Draw borders around text
+draw_borders no
+
+# Stippled borders?
+stippled_borders 8
+
+# border margins
+# border_margin 4
+
+# border width
+border_width 1
+
+# Default colors and also border colors
+default_color white
+default_shade_color black
+default_outline_color white
+
+# Text alignment, other possible values are commented
+alignment top_left
+#alignment top_right
+#alignment bottom_left
+#alignment bottom_right
+
+# Gap between borders of screen and text
+# same thing as passing -x at command line
+gap_x 5
+gap_y 10
+
+# Subtract file system buffers from used memory?
+no_buffers yes
+
+# set to yes if you want all text to be in uppercase
+uppercase no
+
+# number of cpu samples to average
+# set to 1 to disable averaging
+cpu_avg_samples 2
+
+# number of net samples to average
+# set to 1 to disable averaging
+net_avg_samples 2
+
+# Force UTF8? note that UTF8 support required XFT
+override_utf8_locale no
+
+
+# Add spaces to keep things from moving about?  This only affects certain objects.
+use_spacer right
+
+#Text below this point
+
+TEXT
+
+DATE${hr 1}
+${alignc 18}${font Freesans:pixelsize=15:bold}${color }${time %H:%M}
+${alignc}${font Freesans:pixelsize=9}${time %a, }${time %e %B %G}
+
+SYS INFO${hr 1}
+
+${color lightblue}Uptime:${alignr}${color }$uptime
+${color lightblue}Kern:${alignr}${color }$kernel
+${color lightblue}CPU Temp:${alignr}${color }${execi 10 sensors | grep 'CPU Temperature' | cut -c 22-23}c
+${color lightblue}MB   Temp:${alignr}${color}${execi 10 sensors | grep 'MB Temperature' |  cut -c 22-23}c
+${color lightblue}GPU Temp:${alignr}${color}${execi 10 sensors | grep 'temp1' | grep -v high | cut -c 16-17}c
+
+[${color }$loadavg] ${alignr}[$running_processes/$processes]
+${color lightblue}cpu1 ${color }${alignr}${cpu cpu1}% ${cpubar cpu1 4,60 }
+${color lightblue}cpu2 ${color }${alignr}${cpu cpu2}% ${cpubar cpu2 4,60 }
+${color lightblue}cpu3 ${color }${alignr}${cpu cpu3}% ${cpubar cpu3 4,60}
+${color lightblue}cpu4 ${color }${alignr}${cpu cpu4}% ${cpubar cpu4 4,60}
+${color lightblue}cpu5 ${color }${alignr}${cpu cpu5}% ${cpubar cpu5 4,60}
+${color lightblue}cpu6 ${color }${alignr}${cpu cpu6}% ${cpubar cpu6 4,60}
+
+${color lightblue}ram ${alignr}${color }$mem ${membar 4,60 }
+${color lightblue}swap ${alignr}${color }$swap ${swapbar 4,60}
+${color lightblue}root   ${alignr}${color }${fs_free /} ${fs_bar 4,60 /}
+${color lightblue}home  ${alignr}${color }${fs_free /home} ${fs_bar 4,60 /home}
+
+${color lightblue}Highest CPU:
+${color lightgrey} ${top name 2}${top cpu 2}
+${color lightgrey} ${top name 3}${top cpu 3}
+${color lightgrey} ${top name 4}${top cpu 4}
+
+${color lightblue}Highest MEM:
+${color #ddaa00} ${top_mem name 1}${top_mem mem 1}
+${color lightgrey} ${top_mem name 2}${top_mem mem 2}
+${color lightgrey} ${top_mem name 3}${top_mem mem 3}
+${color lightgrey} ${top_mem name 4}${top_mem mem 4}
+#${color lightblue}MEM:  ${color } $memperc% $mem/$memmax
+#${membar 3,100}
+#${color lightblue}SWAP: ${color }$swapperc% $swap/$swapmax
+#${swapbar 3,100}
+#${color lightblue}ROOT:    ${color }${fs_free /}/${fs_size /}
+#${fs_bar 3,100 /}
+#${color lightblue}HOME:  ${color }${fs_free /home}/${fs_size /home}
+#${fs_bar 3,100 /home}
+#${color lightblue}NET:
+
+NET INFO${hr 1}
+
+enp2s0: ${alignr}${addr enp2s0}
+enp3s6: ${alignr}${addr enp3s6}
+
+${color}Up: ${color }${upspeed enp2s0} k/s ${color black}${alignr}${upspeedgraph enp2s0 20,60 000000 ffffff}
+${color}Down: ${color }${downspeed enp2s0}k/s${color black}${alignr}${downspeedgraph enp2s0 20,60 000000 ffffff}
+
+#${color lightblue}latest Journalctl:
+#${color}${exec journalctl --lines=10}
+
