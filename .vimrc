@@ -1,13 +1,11 @@
-"runtime bundle/vim-pathogen/autoload/pathogen.vim
-execute pathogen#infect()
-
 syntax on
+set background=dark
 set cindent
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 set expandtab
-set number
+"set number
 set tw=79
 set nowrap
 set fo-=t
@@ -51,14 +49,14 @@ nnoremap U <C-r>
 noremap <F1> <Esc>
 
 " disable arrow keys
-inoremap  <Up>     <NOP>
-inoremap  <Down>   <NOP>
-inoremap  <Left>   <NOP>
-inoremap  <Right>  <NOP>
-noremap   <Up>     <NOP>
-noremap   <Down>   <NOP>
-noremap   <Left>   <NOP>
-noremap   <Right>  <NOP>
+"inoremap  <Up>     <NOP>
+"inoremap  <Down>   <NOP>
+"inoremap  <Left>   <NOP>
+"inoremap  <Right>  <NOP>
+"noremap   <Up>     <NOP>
+"noremap   <Down>   <NOP>
+"noremap   <Left>   <NOP>
+"noremap   <Right>  <NOP>
 
 " bind C-<key> to move between windows instead of C-w-<key>
 "map <c-j> <c-w>j
