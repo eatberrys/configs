@@ -106,8 +106,9 @@ use_spacer right
 TEXT
 
 DATE${hr 1}
-${alignc 18}${font Freesans:pixelsize=15:bold}${color }${time %H:%M}
-${alignc}${font Freesans:pixelsize=9}${time %a, }${time %e %B %G}
+
+${alignc 18}${font Freesans:pixelsize=15:bold}${time %H:%M}${font}
+${alignc}${font Freesans:pixelsize=9}${time %a %e %B %G}${font}
 
 SYS INFO${hr 1}
 
@@ -130,16 +131,18 @@ ${color lightblue}swap ${alignr}${color }$swap ${swapbar 4,60}
 ${color lightblue}root   ${alignr}${color }${fs_free /} ${fs_bar 4,60 /}
 ${color lightblue}home  ${alignr}${color }${fs_free /home} ${fs_bar 4,60 /home}
 
-${color lightblue}Highest CPU:
-${color lightgrey} ${top name 2}${top cpu 2}
-${color lightgrey} ${top name 3}${top cpu 3}
-${color lightgrey} ${top name 4}${top cpu 4}
+${color }Highest CPU${hr 1}
 
-${color lightblue}Highest MEM:
-${color #ddaa00} ${top_mem name 1}${top_mem mem 1}
-${color lightgrey} ${top_mem name 2}${top_mem mem 2}
-${color lightgrey} ${top_mem name 3}${top_mem mem 3}
-${color lightgrey} ${top_mem name 4}${top_mem mem 4}
+${color lightgrey} ${top name 2}${alignr}${top cpu 2}
+${color lightgrey} ${top name 3}${alignr}${top cpu 3}
+${color lightgrey} ${top name 4}${alignr}${top cpu 4}
+
+${color }Highest MEM${hr 1}
+
+${color #ddaa00} ${top_mem name 1}${alignr}${top_mem mem 1}
+${color lightgrey} ${top_mem name 2}${alignr}${top_mem mem 2}
+${color lightgrey} ${top_mem name 3}${alignr}${top_mem mem 3}
+${color lightgrey} ${top_mem name 4}${alignr}${top_mem mem 4}
 #${color lightblue}MEM:  ${color } $memperc% $mem/$memmax
 #${membar 3,100}
 #${color lightblue}SWAP: ${color }$swapperc% $swap/$swapmax
@@ -158,6 +161,12 @@ enp3s6: ${alignr}${addr enp3s6}
 ${color}Up: ${color }${upspeed enp2s0} k/s ${color black}${alignr}${upspeedgraph enp2s0 20,60 000000 ffffff}
 ${color}Down: ${color }${downspeed enp2s0}k/s${color black}${alignr}${downspeedgraph enp2s0 20,60 000000 ffffff}
 
+${color}EMAILS${hr 1}
+
+#${color lightblue}Gmail:${alignr}${color }${execi 10 python /home/jacob/.scripts/gmail.py}
+
+
 #${color lightblue}latest Journalctl:
 #${color}${exec journalctl --lines=10}
+
 
