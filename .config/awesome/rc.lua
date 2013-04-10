@@ -62,7 +62,7 @@ local layouts =
 --  awful.layout.suit.tile.left,
 --  awful.layout.suit.tile.top,
     awful.layout.suit.fair,
---  awful.layout.suit.fair.horizontal,
+    awful.layout.suit.fair.horizontal,
 --  awful.layout.suit.spiral,
 --  awful.layout.suit.spiral.dwindle,
 --  awful.layout.suit.max,
@@ -86,7 +86,7 @@ end
 tags = {}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
+    tags[s] = awful.tag({ 1 , 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
 end
 -- }}}
 
@@ -490,6 +490,7 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 do
   local cmds =
   {
+      "dualx",
       "nm-my",
       "redshift-my",
       "bitcasa-my",

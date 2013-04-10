@@ -9,6 +9,8 @@ set expandtab
 set tw=79
 set nowrap
 set fo-=t
+
+map <F3> :set number!<ENTER>
 "set colorcolumn=80
 
 " save sudo-only files

@@ -6,8 +6,8 @@
 [[ $- != *i* ]] && return
 
 alias ls='ls --color=auto'
-alias rdnucac='rdesktop vlabs.nucacdf.org -g 1440x900 -d vlabs.local -u jberry -p - '
-alias dualx='xrandr --output DVI-0 --mode 1440x900 --left-of DVI-1 --output DVI-1 --mode 1920x1080'
+alias rdnucac='rdesktop vlabs.nucacdf.org -g 1920x1080 -d vlabs.local -u jberry -p - '
+alias dualx='xrandr --output DVI-0 --mode 1024x768 --rotate right --right-of DVI-1 --output DVI-1 --mode 1920x1080' 
 
 
 PS1='[\u@\h \W]\$ '

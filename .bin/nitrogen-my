@@ -1,5 +1,6 @@
 #!/bin/bash
 
+xrandr --output DVI-0 --mode 1024x768 --rotate right --right-of DVI-1 --output DVI-1 --mode 1920x1080
 
-exec nitrogen --restore 
+exec nitrogen --restore
 
