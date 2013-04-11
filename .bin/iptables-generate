@@ -1,0 +1,168 @@
+#!/bin/bash
+
+EXTIF="eth0"
+#INTIF="tun0"
+#INTIP="192.168.24.1"
+#INTNET="192.168.24.0/24"
+LOGDROPLIMIT="2/s"
+LOGDROPLIMITBURST="10"
+
+mv /etc/iptables/iptables.rules /etc/iptables/iptables.save
+cat >/etc/iptables/iptables.rules  <<EOF
+
+*filter
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT ACCEPT [0:0]
+
+-N LOGDROP
+-A LOGDROP -p tcp -m limit --limit $LOGDROPLIMIT --limit-burst $LOGDROPLIMITBURST -j LOG --log-prefix "iptables:TCP LOGDROP: "
+-A LOGDROP -p udp -m limit --limit $LOGDROPLIMIT --limit-burst $LOGDROPLIMITBURST -j LOG --log-prefix "iptables:UDP LOGDROP: "
+-A LOGDROP -p icmp -m limit --limit $LOGDROPLIMIT --limit-burst $LOGDROPLIMITBURST -j LOG --log-prefix "iptables:ICMP LOGDROP: "
+-A LOGDROP -f -m limit --limit $LOGDROPLIMIT --limit-burst $LOGDROPLIMITBURST -j LOG --log-prefix "iptables:FRAGMENT LOGDROP: "
+-A LOGDROP -j DROP
+
+-N LOGACCEPT
+-A LOGACCEPT -p tcp -j LOG --log-prefix "iptables:TCP LOGACCEPT: "
+-A LOGACCEPT -p udp -j LOG --log-prefix "iptables:UDP LOGACCEPT: "
+-A LOGACCEPT -p icmp -j LOG --log-prefix "iptables:ICMP LOGACCEPT: "
+-A LOGACCEPT -f -j LOG --log-prefix "iptables:FRAGMENT LOGACCEPT: "
+-A LOGACCEPT -j ACCEPT
+
+# Loopback is always okay
+-A INPUT -i lo -j ACCEPT
+
+# Any incoming not headed for the external IP drop (actually I don't want to
+# need $EXTIP if I don't need it )
+#-A INPUT -i $EXTIF ! -d $EXTIP -j DROP
+
+#allow GRE
+#-A INPUT -p 47 -j ACCEPT
+
+#ICMP
+-A INPUT -p ICMP -j ACCEPT
+
+# DHCP server not needed
+#-A INPUT -i $INTIF -p tcp --sport 67 --dport 68 -j ACCEPT
+#-A INPUT -i $INTIF -p udp --sport 67 --dport 68 -j ACCEPT
+
+# SSH server
+-A INPUT -p tcp --dport 22 -j ACCEPT
+
+#VNC
+-A INPUT -p tcp --dport 5900 -j ACCEPT
+
+# Web Server
+#-A INPUT -p tcp --dport 80 -j ACCEPT
+
+#Open VPN
+#-A INPUT -p udp --dport 1194 -j ACCEPT
+#-A INPUT -p tcp --dport 1194 -j ACCEPT
+
+# TFTP server not needed
+#-A INPUT -p udp --dport 69 -j ACCEPT
+
+# Minecraft server not needed
+#-A INPUT -p tcp --dport 25565 -j ACCEPT
+#-A INPUT -p udp --dport 25565 -j ACCEPT
+
+# Existing connections are fine
+-A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+# New ones are too unless they're from outside
+-A INPUT -m conntrack --ctstate NEW ! -i $EXTIF -j ACCEPT
+
+# Forwarding existing connections to the internal interface is fine
+#-A FORWARD -i $EXTIF -o $INTIF -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+# Internal network to universe is fine
+#-A FORWARD -i $INTIF -o $EXTIF -j ACCEPT
+
+# Don't forward traffic from outside to outside
+-A FORWARD -i $EXTIF -o $EXTIF -j REJECT
+
+COMMIT
+
+*nat
+:PREROUTING ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+
+# Masquerade outgoing for NAT
+#-A POSTROUTING -o $EXTIF -j MASQUERADE
+
+COMMIT
+EOF
+
+systemctl restart iptables
+
+EXTIF=tun0
+#INTIP=2001:4830:1100:8273::1
+
+mv /etc/iptables/ip6tables.rules /etc/iptables/ip6tables.save
+cat >/etc/iptables/ip6tables.rules  <<EOF
+
+*filter
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT ACCEPT [0:0]
+
+#Bad stuff (Not for IPV4)
+-A INPUT -m rt --rt-type 0 -j DROP
+-A FORWARD -m rt --rt-type 0 -j DROP
+-A OUTPUT -m rt --rt-type 0 -j DROP
+
+-A INPUT -m rt --rt-type 0 -j DROP
+-A FORWARD -m rt --rt-type 0 -j DROP
+-A OUTPUT -m rt --rt-type 0 -j DROP
+
+-N LOGDROP
+-A LOGDROP -p tcp -m limit --limit $LOGDROPLIMIT --limit-burst $LOGDROPLIMITBURST
+-A LOGDROP -p udp -m limit --limit $LOGDROPLIMIT --limit-burst $LOGDROPLIMITBURST
+-A LOGDROP -p icmp -m limit --limit $LOGDROPLIMIT --limit-burst $LOGDROPLIMITBURST
+-A LOGDROP -m limit --limit $LOGDROPLIMIT --limit-burst $LOGDROPLIMITBURST -j LOG
+-A LOGDROP -j DROP
+
+-N LOGACCEPT
+-A LOGACCEPT -p tcp -j LOG --log-prefix "TCP LOGACCEPT: "
+-A LOGACCEPT -p udp -j LOG --log-prefix "UDP LOGACCEPT: "
+-A LOGACCEPT -p icmp -j LOG --log-prefix "ICMP LOGACCEPT: "
+-A LOGACCEPT -j LOG --log-prefix "FRAGMENT LOGACCEPT: "
+-A LOGACCEPT -j ACCEPT
+
+# Loopback is always okay
+-A INPUT -i lo -j ACCEPT
+
+# ICMP
+-A INPUT -p ICMPv6 -j ACCEPT
+
+# SSH server
+-A INPUT -p tcp --dport 22 -j ACCEPT
+
+
+# Web Server
+#-A INPUT -p tcp --dport 80 -j ACCEPT
+
+#Open VPN
+#-A INPUT -p udp --dport 1194 -j ACCEPT
+
+#Existing connections are fine
+-A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+# New ones are too unless they're from outside
+-A INPUT -m conntrack --ctstate NEW ! -i $EXTIF -j ACCEPT
+
+# Forwarding existing connections to the internal interface is fine
+#-A FORWARD -i $EXTIF -o $INTIF -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+# Internal network to universe is fine
+#-A FORWARD -i $INTIF -o $EXTIF -j ACCEPT
+
+# Don't forward traffic from outside to outside
+#-A FORWARD -i $EXTIF -o $EXTIF -j REJECT
+
+COMMIT
+EOF
+
+systemctl restart ip6tables
+
