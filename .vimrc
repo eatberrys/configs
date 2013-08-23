@@ -11,6 +11,8 @@ set nowrap
 set fo-=t
 
 map <F3> :set number!<ENTER>
+
+map <F4> :set wrap!<ENTER>
 "set colorcolumn=80
 
 " save sudo-only files
