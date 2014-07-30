@@ -1,3 +1,6 @@
+-----------------------------------------------
+-- Imports
+------------------------------------------------
 -- Standard awesome library
 local gears = require("gears")
 local awful = require("awful")
@@ -12,10 +15,30 @@ local naughty = require("naughty")
 local menubar = require("menubar")
 -- Vicious library for graphs and stuff
 local vicious = require("vicious")
+-----------------------------------------------
 
--- {{{ Error handling
+
+
+-----------------------------------------------
+-- Function Defs
+------------------------------------------------
+-- File exsists function (Optional for lower file check to handle error
+
+
+function file_exists(name)
+    local f=io.open(name,"r")
+    if f~=nil then io.close(f) return true else return false end
+end
+
+-----------------------------------------------
+
+
+-----------------------------------------------
+-- Error Handleing
+------------------------------------------------
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
+
 if awesome.startup_errors then
     naughty.notify({ preset = naughty.config.presets.critical,
                      title = "Oops, there were errors during startup!",
@@ -36,14 +59,50 @@ do
         in_error = false
     end)
 end
--- }}}
 
--- {{{ Variable definitions
+-----------------------------------------------
+
+
+
+-----------------------------------------------
+-- Variable defs
+------------------------------------------------
+
 -- Themes define colours, icons, and wallpapers
-beautiful.init("/usr/share/awesome/themes/default/theme.lua")
+
+theme_pref = "/usr/share/awesome/themes/fence/theme.lua" -- Need to install git themes from AUR
+
+-- This check is optional, will fail to default but throw error, this will "handle" error
+
+if file_exists(theme_pref) == true then
+    beautiful.init(theme_pref)
+else
+    beautiful.init("/usr/share/awesome/themes/default/theme.lua")
+end
+
+-- Theme 0ver R1des
+
+--Bar Color
+-- theme.bg_normal     = "#000000"
+-- theme.bg_focus      = "#1793d1"
+-- theme.bg_urgent     = "#ff0000"
+-- theme.bg_minimize   = "#000000"
+
+--Font Color
+theme.fg_normal     = "#dddddd"
+theme.fg_focus      = "#1793d1"
+--theme.fg_urgent     = "#ffffff"
+theme.fg_minimize   = "#adbdbd"
+
+--Border Color
+--theme.border_width  = "1"
+--theme.border_normal = "#000000"
+--theme.border_focus  = "#1793d1"
+--theme.border_marked = "#91231c"
+
 
 -- This is used later as the default terminal and editor to run.
-terminal = "xterm"
+terminal = "lxterminal"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -54,6 +113,8 @@ editor_cmd = terminal .. " -e " .. editor
 -- However, you can use another modifier like Mod1, but it may interact with others.
 modkey = "Mod4"
 
+--enable compistion with xcompmgr 
+-- awful.util.spawn_with_shell("xcompmgr -cF &")
 -- Table of layouts to cover with awful.layout.inc, order matters.
 local layouts =
 {
@@ -66,27 +127,23 @@ local layouts =
 --  awful.layout.suit.spiral,
 --  awful.layout.suit.spiral.dwindle,
 --  awful.layout.suit.max,
---  awful.layout.suit.max.fullscreen,
+    awful.layout.suit.max.fullscreen,
 --  awful.layout.suit.magnifier,
     awful.layout.suit.floating
 }
--- }}}
+-----------------------------------------------
 
--- {{{ Wallpaper
-beautiful.wallpaper = "/home/jacob/pictures/cvsled.jpg"
-if beautiful.wallpaper then
---  for s = 1, screen.count() do
-        gears.wallpaper.maximized(beautiful.wallpaper, nil, false)
---  end
-end
--- }}}
+
+-----------------------------------------------
+-- Build the screen (Tags, launcher, wibox, widget etc)
+------------------------------------------------
 
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
 tags = {}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ 1 , 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
+    tags[s] = awful.tag({ 1 , 2, 3, 4, }, s, layouts[1])
 end
 -- }}}
 
@@ -102,7 +159,7 @@ myawesomemenu = {
 mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
                                     { "open terminal", terminal },
                                     { "chrome", "chromium" },
-				    { "suspend", "systemctl suspend"},
+                                    { "suspend", "systemctl suspend"},
                                     { "lock", "i3lock -d -c 000000" },
                                     { "run", function() mypromptbox[mouse.screen]:run() end }
                                   }
@@ -200,7 +257,7 @@ for s = 1, screen.count() do
     mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist.buttons)
 
     -- Create the wibox
-    mywibox[s] = awful.wibox({ position = "top", screen = s })
+    mywibox[s] = awful.wibox({ position = "top", screen = s, height = 15  })
 
     -- Widgets that are aligned to the left
     local left_layout = wibox.layout.fixed.horizontal()
@@ -225,6 +282,13 @@ for s = 1, screen.count() do
     mywibox[s]:set_widget(layout)
 end
 -- }}}
+-----------------------------------------------
+-- END OF SCREEN BUILD SECTION
+------------------------------------------------
+
+-----------------------------------------------
+-- Bindings
+------------------------------------------------
 
 -- {{{ Mouse bindings
 root.buttons(awful.util.table.join(
@@ -384,6 +448,15 @@ clientbuttons = awful.util.table.join(
 root.keys(globalkeys)
 -- }}}
 
+-----------------------------------------------
+-- END OF KEY BINDING
+------------------------------------------------
+
+
+-----------------------------------------------
+-- Window Rules
+------------------------------------------------
+
 -- {{{ Rules
 awful.rules.rules = {
     -- All clients will match this rule.
@@ -486,16 +559,19 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 
 
 
--- autoruns
+-----------------------------------------------
+-- Auto Runs
+------------------------------------------------
+
 do
   local cmds =
   {
-      "dualx",
-      "nm-my",
-      "redshift-my",
-      "bitcasa-my",
-    "xrdb /home/jacob/.Xresources",
-    "nitrogen-my",
+    -- notneeded "dualx",
+      "nm-applet",
+    -- maybe  "redshift-my",
+    -- deprcated "bitcasa-my",
+    -- not needed"xrdb /home/jacob/.Xresources",
+    "nitrogen --restore",
   }
 
   for _,i in pairs(cmds) do
