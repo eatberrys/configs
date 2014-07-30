@@ -18,7 +18,6 @@ local vicious = require("vicious")
 -----------------------------------------------
 
 
-
 -----------------------------------------------
 -- Function Defs
 ------------------------------------------------
@@ -158,7 +157,7 @@ myawesomemenu = {
 
 mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
                                     { "open terminal", terminal },
-                                    { "chrome", "chromium" },
+                                    { "firefox", "firefox" },
                                     { "suspend", "systemctl suspend"},
                                     { "lock", "i3lock -d -c 000000" },
                                     { "run", function() mypromptbox[mouse.screen]:run() end }
