@@ -87,6 +87,11 @@ end
 -- theme.bg_urgent     = "#ff0000"
 -- theme.bg_minimize   = "#000000"
 
+--Font
+
+--theme.font = "miscfixedsc613 9"
+
+
 --Font Color
 theme.fg_normal     = "#dddddd"
 theme.fg_focus      = "#1793d1"
@@ -101,7 +106,7 @@ theme.fg_minimize   = "#adbdbd"
 
 
 -- This is used later as the default terminal and editor to run.
-terminal = "lxterminal"
+terminal = "urxvt"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -121,12 +126,12 @@ local layouts =
     awful.layout.suit.tile,
 --  awful.layout.suit.tile.left,
 --  awful.layout.suit.tile.top,
-    awful.layout.suit.fair,
-    awful.layout.suit.fair.horizontal,
+--    awful.layout.suit.fair,
+--    awful.layout.suit.fair.horizontal,
 --  awful.layout.suit.spiral,
 --  awful.layout.suit.spiral.dwindle,
---  awful.layout.suit.max,
-    awful.layout.suit.max.fullscreen,
+    awful.layout.suit.max,
+--  awful.layout.suit.max.fullscreen,
 --  awful.layout.suit.magnifier,
     awful.layout.suit.floating
 }
