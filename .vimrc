@@ -16,7 +16,7 @@ map <F4> :set wrap!<ENTER>
 "set colorcolumn=80
 
 " save sudo-only files
-cmap w!! %!sudo tee > /dev/null %
+cmap w!! w !sudo tee %
 
 " ex mode commands made easy
 nnoremap ; :
